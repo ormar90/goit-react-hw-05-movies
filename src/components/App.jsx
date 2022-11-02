@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from './Layout';
 
@@ -10,7 +10,6 @@ const Reviews = lazy(() => import('components/Reviews'));
 
 export const App = () => {
   return (
-    <Suspense>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -21,6 +20,5 @@ export const App = () => {
           </Route>
         </Route>
       </Routes>
-    </Suspense>
   );
 };

@@ -1,16 +1,52 @@
 import SearchBox from 'components/SearchBox';
-import { Suspense } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { useParams, NavLink, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { searchMovies } from 'services/API';
+import { useEffect } from 'react';
+
+
+
 
 const Movies = () => {
   const { movieId } = useParams();
+  const [movies, setMovies] = useState([]);
+  const [searchParam, setSearchParam] = useSearchParams(); 
+  const query = searchParam.get('search') ?? '';
+
+  useEffect(() => {
+    if (query === '') {
+      return;
+    }
+    const fetchMovies = async () => {
+      try {
+        const { results } = await searchMovies(query);
+        setMovies(results);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchMovies();
+  }, [query, searchParam]);
+
+  const onSubmit = e => {
+    console.log(e);
+    setSearchParam(e.movie !== '' ? { search: e.movie } : {});
+  };  
 
   return (
     <>
-      {!movieId && <SearchBox />}
-      <Suspense fallback={<div>Loading...</div>}>
-        <Outlet />
-      </Suspense>
+      {!movieId && <SearchBox onSubmit={onSubmit} />}
+      {movies.length > 0 && query && (
+        <ul>
+          {movies.map(({ id, title }) => {
+            return (
+              <li key={id}>
+                <NavLink to={`${id}`}>{title}</NavLink>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </>
   );
 };
