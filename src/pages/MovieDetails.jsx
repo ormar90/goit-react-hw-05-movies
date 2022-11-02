@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Suspense } from 'react';
+import { useState, useEffect } from 'react';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { getMovieDetails } from "services/API";
+import { getMovieDetails } from 'services/API';
 
-
-export const MovieDetails = () => {
+const MovieDetails = () => {
   const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
   const [movieDetails, setMovieDetails] = useState(null);
   const { movieId } = useParams();
@@ -13,8 +13,8 @@ export const MovieDetails = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const result  = await getMovieDetails(movieId);
-        
+        const result = await getMovieDetails(movieId);
+
         setMovieDetails(result);
       } catch (error) {
         console.log(error.message);
@@ -27,11 +27,11 @@ export const MovieDetails = () => {
     return null;
   }
   const { poster_path, title, release_date, overview, genres } = movieDetails;
-  
+
   return (
     <>
       <div>
-        <NavLink to={location.state?.from ?? "/"}>Go Back</NavLink>
+        <NavLink to={location.state?.from ?? '/'}>Go Back</NavLink>
       </div>
       <img src={`${IMG_URL}${poster_path}`} alt="" width="300" />
       <div>
@@ -55,7 +55,11 @@ export const MovieDetails = () => {
           Reviews
         </NavLink>
       </div>
-      <Outlet />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };
+
+export default MovieDetails;

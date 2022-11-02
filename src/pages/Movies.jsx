@@ -1,15 +1,18 @@
-// import { MovieDetails } from 'pages/MovieDetails';
-import { SearchBox } from 'components/SearchBox';
+import SearchBox from 'components/SearchBox';
+import { Suspense } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
-export const Movies = () => {
+const Movies = () => {
   const { movieId } = useParams();
 
   return (
     <>
       {!movieId && <SearchBox />}
-      {/* {movieId && <MovieDetails />} */}
-      <Outlet />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };
+
+export default Movies;

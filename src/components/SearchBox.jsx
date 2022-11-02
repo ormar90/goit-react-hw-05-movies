@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { searchMovies } from "services/API";
 import { useEffect } from "react";
 
-export const SearchBox = () => {
+const SearchBox = () => {
   const [movies, setMovies] = useState([])
   const [searchParam, setSearchParam] = useSearchParams();
   const {
@@ -59,3 +59,5 @@ export const SearchBox = () => {
     </>
   );
 };
+
+export default SearchBox;
