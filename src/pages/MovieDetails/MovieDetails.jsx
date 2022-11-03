@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
 import { getMovieDetails } from 'services/API';
+import { AboutLinkWrapper, GoBackLink, GoBackLinkWrapper, Link } from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
@@ -30,9 +30,9 @@ const MovieDetails = () => {
 
   return (
     <>
-      <div>
-        <NavLink to={location.state?.from ?? '/'}>Go Back</NavLink>
-      </div>
+      <GoBackLinkWrapper>
+        <GoBackLink to={location.state?.from ?? '/movies'}>Go Back</GoBackLink>
+      </GoBackLinkWrapper>
       <img src={`${IMG_URL}${poster_path}`} alt="" width="300" />
       <div>
         <h1>{title}</h1>
@@ -48,12 +48,14 @@ const MovieDetails = () => {
       </div>
       <div>
         <p>Adittional information</p>
-        <NavLink to="cast" name={movieId}>
-          Cast
-        </NavLink>
-        <NavLink to="reviews" name={movieId}>
-          Reviews
-        </NavLink>
+        <AboutLinkWrapper>
+          <Link to="cast" name={movieDetails.id}>
+            Cast
+          </Link>
+          <Link to="reviews" name={movieDetails.id}>
+            Reviews
+          </Link>
+        </AboutLinkWrapper>
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         <Outlet />

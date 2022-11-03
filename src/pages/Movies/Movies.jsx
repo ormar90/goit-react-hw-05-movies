@@ -1,14 +1,12 @@
-import SearchBox from 'components/SearchBox';
-import { useParams, NavLink, useSearchParams } from 'react-router-dom';
+import SearchBox from 'components/SearchBox/SearchBox';
+import { useParams, NavLink, useSearchParams, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { searchMovies } from 'services/API';
 import { useEffect } from 'react';
 
-
-
-
 const Movies = () => {
   const { movieId } = useParams();
+  const location = useLocation();
   const [movies, setMovies] = useState([]);
   const [searchParam, setSearchParam] = useSearchParams(); 
   const query = searchParam.get('search') ?? '';
@@ -41,7 +39,7 @@ const Movies = () => {
           {movies.map(({ id, title }) => {
             return (
               <li key={id}>
-                <NavLink to={`${id}`}>{title}</NavLink>
+                <NavLink to={`${id}`} state={{from: location}}>{title}</NavLink>
               </li>
             );
           })}
